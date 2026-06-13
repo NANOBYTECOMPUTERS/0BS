@@ -122,7 +122,7 @@ void draw_capture_settings()
         }
 #endif
 
-        std::vector<std::string> captureMethodOptions = { "duplication_api", "winrt", "virtual_camera", "udp_capture" };
+        std::vector<std::string> captureMethodOptions = { "duplication_api", "wgc", "virtual_camera", "udp_capture" };
         std::vector<const char*> captureMethodItems;
 
         for (const auto& option : captureMethodOptions)
@@ -156,15 +156,15 @@ void draw_capture_settings()
 
     draw_capture_preview();
 
-    if (config.capture_method == "winrt")
+    if (config.capture_method == "wgc" || config.capture_method == "winrt")
     {
-        if (OverlayUI::BeginSection("WinRT", "capture_section_winrt"))
+        if (OverlayUI::BeginSection("WGC (Windows Graphics Capture)", "capture_section_wgc"))
         {
             {
                 std::vector<std::string> targetOptions = { "monitor", "window" };
                 int currentTargetIndex = (config.capture_target == "window") ? 1 : 0;
                 ImGui::AlignTextToFramePadding();
-                ImGui::TextUnformatted("Capture target (WinRT)");
+                ImGui::TextUnformatted("Capture target (WGC)");
                 ImGui::SameLine(0.0f, 8.0f);
                 ImGui::SetNextItemWidth(CaptureCompactComboWidth());
                 if (ImGui::Combo("##capture_target_winrt", &currentTargetIndex,
@@ -248,7 +248,7 @@ void draw_capture_settings()
         }
     }
 
-    if (config.capture_method == "duplication_api" || (config.capture_method == "winrt" && config.capture_target != "window"))
+    if (config.capture_method == "duplication_api" || ((config.capture_method == "wgc" || config.capture_method == "winrt") && config.capture_target != "window"))
     {
         if (OverlayUI::BeginSection("Monitor Capture", "capture_section_monitor"))
         {

@@ -91,17 +91,18 @@ These launchers do not rebuild OpenCV. They reuse the current repository build p
 | General Capture | Circle mask | circle_mask | true/false | true | Applies the circular capture mask. |
 | General Capture | Use CUDA Direct Capture | capture_use_cuda | true/false | n/a | CUDA/TensorRT builds only. Available with duplication_api capture. |
 | Capture Preview | Show Preview Window | show_window | true/false | true | Shows the capture preview/debug frame inside the Capture tab. |
-| WinRT | Capture Borders | capture_borders | true/false | true | WinRT capture only. Disabled automatically on unsupported Windows builds. |
-| WinRT | Capture Cursor | capture_cursor | true/false | true | WinRT capture only. Includes the cursor in captured frames. |
+
 
 ### Other GUI-Exposed Config Controls
 
 | Section | Control | Config key | Type/options | Current | Notes |
 | --- | --- | --- | --- | --- | --- |
 | General Capture | Detection Resolution | detection_resolution | 160, 320, 640 | 640 | Changes detector input resolution and restarts/reloads dependent paths. |
-| General Capture | Capture method | capture_method | duplication_api, winrt, virtual_camera, udp_capture | duplication_api | Selects frame source. |
-| WinRT | Capture target (WinRT) | capture_target | monitor, window | monitor | WinRT only. |
-| WinRT | Window title contains | capture_window_title | text |  | Used when WinRT target is window. |
+| General Capture | Capture method | capture_method | duplication_api, wgc, virtual_camera, udp_capture | duplication_api | Selects frame source. "wgc" (recommended) is Windows Graphics Capture (WGC / Windows.Graphics.Capture). "winrt" and "graphics_capture" are accepted aliases. |
+| WGC | Capture Borders | capture_borders | true/false | true | WGC capture only. Disabled automatically on unsupported Windows builds (pre-1903). |
+| WGC | Capture Cursor | capture_cursor | true/false | true | WGC capture only. Includes the cursor in captured frames. |
+| WGC | Capture target (WGC) | capture_target | monitor, window | monitor | WGC only. |
+| WGC | Window title contains | capture_window_title | text |  | Used when WGC target is window. |
 | Monitor Capture | Capture monitor | monitor_idx | monitor index | 0 | Monitor list is built from active displays. |
 | Virtual Camera | Virtual camera | virtual_camera_name | available cameras | None | Filtered list of DirectShow video input devices. |
 | UDP Capture | UDP IP | udp_ip | IPv4/string | 0.0.0.0 | Applied with the Apply UDP Settings button. |

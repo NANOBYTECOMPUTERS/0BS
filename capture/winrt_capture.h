@@ -21,6 +21,8 @@
 
 #include "capture.h"
 
+// Windows.Graphics.Capture (WGC) implementation.
+// Exposed as capture_method "wgc" (preferred), with "winrt" and "graphics_capture" accepted as legacy aliases.
 class WinRTScreenCapture : public IScreenCapture
 {
 public:
