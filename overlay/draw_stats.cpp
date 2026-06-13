@@ -150,7 +150,7 @@ void draw_stats()
     {
         captureSource = "Monitor " + std::to_string(std::max(0, config.monitor_idx) + 1);
     }
-    else if (config.capture_method == "winrt")
+    else if (config.capture_method == "wgc" || config.capture_method == "winrt")
     {
         if (config.capture_target == "window")
         {

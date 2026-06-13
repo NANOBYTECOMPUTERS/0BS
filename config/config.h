@@ -10,7 +10,7 @@ class Config
 {
 public:
     // Capture
-    std::string capture_method; // "duplication_api", "winrt", "virtual_camera", "udp_capture"
+    std::string capture_method; // "duplication_api", "wgc" (or "winrt"/"graphics_capture" aliases), "virtual_camera", "udp_capture"
     std::string capture_target;
     std::string capture_window_title;
     std::string udp_ip;

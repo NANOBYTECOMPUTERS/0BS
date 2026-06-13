@@ -149,8 +149,12 @@ CaptureThreadConfig SnapshotCaptureConfig()
 
 std::string NormalizeCaptureMethod(const std::string& method)
 {
-    if (method == "duplication_api" || method == "winrt" || method == "virtual_camera" || method == "udp_capture")
+    if (method == "duplication_api" || method == "wgc" || method == "winrt" || method == "graphics_capture" || method == "virtual_camera" || method == "udp_capture")
+    {
+        if (method == "winrt" || method == "graphics_capture")
+            return "wgc";
         return method;
+    }
     return "duplication_api";
 }
 
@@ -346,10 +350,10 @@ void captureThread(int CAPTURE_WIDTH, int CAPTURE_HEIGHT)
                     return std::make_unique<DuplicationAPIScreenCapture>(width, height, cfg.monitor_idx);
                 }
 
-                if (method == "winrt")
+                if (method == "wgc")
                 {
                     if (cfg.verbose)
-                        std::cout << "[Capture] Using WinRT" << std::endl;
+                        std::cout << "[Capture] Using Windows Graphics Capture (WGC)" << std::endl;
 
                     WinRTScreenCapture::Options options;
                     options.target = cfg.capture_target;
@@ -537,13 +541,13 @@ void captureThread(int CAPTURE_WIDTH, int CAPTURE_HEIGHT)
 
                 const std::string nextMethod = NormalizeCaptureMethod(currentCfg.capture_method);
                 desiredCaptureMethod = nextMethod;
-                const bool nextNeedsWinrt = (nextMethod == "winrt");
+                const bool nextNeedsWinrt = (nextMethod == "wgc");
 
                 // Always teardown current backend first to avoid overlap between old/new capture objects.
                 // WinRT must be destroyed before apartment teardown.
                 if (capturer)
                 {
-                    const bool activeWasWinrt = (activeCapturerMethod == "winrt");
+                    const bool activeWasWinrt = (activeCapturerMethod == "wgc");
                     capturer.reset();
                     activeCapturerMethod.clear();
                     if (activeWasWinrt && !nextNeedsWinrt)
@@ -572,7 +576,7 @@ void captureThread(int CAPTURE_WIDTH, int CAPTURE_HEIGHT)
                 if (now - lastCapturerCreateAttempt >= std::chrono::seconds(1))
                 {
                     desiredCaptureMethod = NormalizeCaptureMethod(currentCfg.capture_method);
-                    winrtApartment.Ensure(desiredCaptureMethod == "winrt");
+                    winrtApartment.Ensure(desiredCaptureMethod == "wgc");
 
                     if (desiredCaptureMethod == "virtual_camera")
                         VirtualCameraCapture::GetAvailableVirtualCameras(true);
@@ -681,7 +685,7 @@ void captureThread(int CAPTURE_WIDTH, int CAPTURE_HEIGHT)
                     const auto now = std::chrono::steady_clock::now();
                     const std::string captureMethodForReuse = NormalizeCaptureMethod(currentCfg.capture_method);
                     const bool canReuseStableDesktopFrame =
-                        captureMethodForReuse == "duplication_api" || captureMethodForReuse == "winrt";
+                        captureMethodForReuse == "duplication_api" || captureMethodForReuse == "wgc";
                     // Desktop capture can time out when nothing repaints; keep detector cadence from the last stable frame.
                     if (canReuseStableDesktopFrame && !lastDetectionFrame.empty())
                     {
